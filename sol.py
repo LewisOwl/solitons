@@ -22,6 +22,12 @@ def n(x, t, phi, *args):
     arg = (x - c*t)/l + phi # phi the param offset to translate the wave
     return n0 / (np.cosh(arg))**2
 
+def chi_sqr(model, exp_coords, exp_data, exp_err, phi, *args):
+    chi_sqr = 0
+
+    # We can loop through each frame/time and evaluate a whole line at once
+    for it in range(len(exp_coords[0,:])):
+        pass
 
 THRESH = 150
 levels = ['5.85', '6.90', '8.00', '9.10', '10.05', '11.15']
@@ -75,6 +81,7 @@ for take in takes:
         ts = [time]*len(dif_sum)
         heights = dif_sum*pixel_scale
         plt.plot(xs, ts, heights)
-
+    # Frames is now 2d array of amplitudes for (x,t). We need to find phi offset
+    # that fits the curve to the wave. We can chi_sqr min this.
 
 plt.show()
