@@ -24,7 +24,7 @@ def n(x, t, phi, c, l, *args):
     # print(arg)
     trig = np.cosh(arg)**2
     return n0 / trig
-
+_re
 def chi_sqr(times, xs, exp_data, exp_err, phi, c, l, *args):
     model_vals = np.empty(exp_data.shape)
     # We can loop through each frame/time and evaluate a whole line at once
@@ -36,16 +36,15 @@ def chi_sqr(times, xs, exp_data, exp_err, phi, c, l, *args):
 
 THRESH = 150
 levels = ['5.85', '6.90', '8.00', '9.10', '10.05', '11.15']
-pixel_scales = [0.08/280, 0.08/278, 0.08/279, 0.05/174, 0.10/346, 0.09/308]
-
+pixel_scales_y = [0.08/280, 0.08/278, 0.08/279, 0.05/174, 0.10/346, 0.09/308]
+pixel_scale_x = 10/331
 #takes = [1,2,3,4,5,6,7,8,9,10]
 takes = [5]
 cols = 1
 
 i_set = 3
 level = levels[i_set]
-pixel_scale = pixel_scales[i_set]
-
+pixel_scale_y = pixel_scales[i_set]
 path = "datas/vh/h{0}cm_{1}/"
 
 
@@ -57,7 +56,7 @@ for (_,_, filename) in os.walk(stat_path):
 stat = cv2.imread(stat_path+stat_names[0])[::-2,5:-5,2]
 stat = stat < THRESH
 stat_sum = np.sum(stat, axis=0)
-xs = np.arange(0, len(stat_sum)*pixel_scale, pixel_scale)
+xs = np.arange(0, len(stat_sum)*pixel_scale_x, pixel_scale_x)
 # Loop over all takes for given height
 for itake, take in enumerate(takes):
     # For specific take t
@@ -83,7 +82,7 @@ for itake, take in enumerate(takes):
 
         dif = img ^ stat
         dif_sum = np.sum(dif, axis=0)
-        frames[:,iname] = dif_sum*pixel_scale
+        frames[:,iname] = dif_sum*pixel_scale_y
         # 3d plot of each frame
         ts = np.asarray([time]*len(dif_sum))
         times.append(time)
@@ -103,11 +102,11 @@ for itake, take in enumerate(takes):
     c, l = c, l*0.68
     print(c,l)
     # Start by finding a phi that corrects the wave translation
-    phi_min_func = lambda phi: chi_sqr(times, xs, frames, 1*pixel_scale, phi, c, l, n0, h)
+    phi_min_func = lambda phi: chi_sqr(times, xs, frames, 3*pixel_scale_y, phi, c, l, n0, h)
     res = scipy.optimize.minimize(phi_min_func, -18, method='Nelder-Mead')
     phi = res.x[0]
     # Use the corrected model to find c & l.  x=[c,l]
-    min_func = lambda x: chi_sqr(times, xs, frames, 3*pixel_scale, phi, x[0], x[1], n0, h)
+    min_func = lambda x: chi_sqr(times, xs, frames, 3*pixel_scale_y, phi, x[0], x[1], n0, h)
     res = scipy.optimize.minimize(min_func,[c, l], method='Nelder-Mead')
     c, l = res.x
     print('Phi: {:.2f}; C: {:.3f}ms^-1; L: {:.3f}m; Chi_sqr_red: {:.5f}'.format(phi, c, l, res.fun))
