@@ -24,7 +24,7 @@ def n(x, t, phi, c, l, *args):
     # print(arg)
     trig = np.cosh(arg)**2
     return n0 / trig
-_re
+
 def chi_sqr(times, xs, exp_data, exp_err, phi, c, l, *args):
     model_vals = np.empty(exp_data.shape)
     # We can loop through each frame/time and evaluate a whole line at once
@@ -37,14 +37,14 @@ def chi_sqr(times, xs, exp_data, exp_err, phi, c, l, *args):
 THRESH = 150
 levels = ['5.85', '6.90', '8.00', '9.10', '10.05', '11.15']
 pixel_scales_y = [0.08/280, 0.08/278, 0.08/279, 0.05/174, 0.10/346, 0.09/308]
-pixel_scale_x = 10/331
+pixel_scale_x = 0.1/331
 #takes = [1,2,3,4,5,6,7,8,9,10]
 takes = [5]
 cols = 1
 
 i_set = 3
 level = levels[i_set]
-pixel_scale_y = pixel_scales[i_set]
+pixel_scale_y = pixel_scales_y[i_set]
 path = "datas/vh/h{0}cm_{1}/"
 
 
