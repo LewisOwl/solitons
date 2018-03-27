@@ -87,8 +87,8 @@ for itake, take in enumerate(takes):
         # 3d plot of each frame
         ts = np.asarray([time]*len(dif_sum))
         times.append(time)
-
-        plt.plot(xs, ts, frames[:,iname])
+        #plt.plot(xs, ts, frames[:,iname])
+        plt.scatter(xs, ts, frames[:,iname], marker='x')
 
 
     # Frames is now 2d array of amplitudes for (x,t). We need to find phi offset
