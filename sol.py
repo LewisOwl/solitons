@@ -12,22 +12,23 @@ fig = plt.figure()
 g = 9.81 # ms^-2
 
 # Model function
-def n(x, t, phi, *args):
+def n(x, t, phi, c, l, *args):
     # calc wave params from n0, h
     n0, h = args
-    c0 = -(g*h)**0.5    # Our wave moves to left => negative c
-    c = c0*(1 + n0 / (2*h))
-    l = ((4*(h**3)) / (3*n0))**0.5
+    # c0 = -(g*h)**0.5    # Our wave moves to left => negative c
+    # c = c0*(1 + n0 / (2*h))
+    # l = ((4*(h**3)) / (3*n0))**0.5
+
     # calc sech params
-    arg = ((x - c*t)/l + phi)*1.5 # phi the param offset to translate the wave
+    arg = (x - c*t)/l + phi # phi the param offset to translate the wave
     trig = np.cosh(arg)**2
     return n0 / trig
 
-def chi_sqr(times, xs, exp_data, exp_err, phi, *args):
+def chi_sqr(times, xs, exp_data, exp_err, phi, c, l, *args):
     model_vals = np.empty(exp_data.shape)
     # We can loop through each frame/time and evaluate a whole line at once
     for it, time in enumerate(times):
-        model_vals[:, it] = n(xs, time, phi, *args)
+        model_vals[:, it] = n(xs, time, phi, c, l, *args)
     residuals = model_vals - exp_data
     chi_sqr = np.sum((residuals/exp_err)**2)
     return chi_sqr/exp_data.size
@@ -91,10 +92,19 @@ for itake, take in enumerate(takes):
     # that fits the curve to the wave. We can chi_sqr min this.
     n0 = np.max(frames)*pixel_scale
     h = float(level)/100
-    min_func = lambda phi: chi_sqr(times, xs, frames, 10*pixel_scale, phi, n0, h)
-    res = scipy.optimize.minimize(min_func,-8)
+    # Calc theoretical values as inital vals
+    c0 = -(g*h)**0.5    # Our wave moves to left => negative c
+    c = c0*(1 + n0 / (2*h))
+    l = ((4*(h**3)) / (3*n0))**0.5
+    # Start by finding a phi that corrects the wave translation
+    phi_min_func = lambda phi: chi_sqr(times, xs, frames, 4*pixel_scale, phi, c, l, n0, h)
+    res = scipy.optimize.minimize(phi_min_func, -10)
     phi = res.x[0]
-    print('Phi: {}; Chi_sqr: {}'.format(phi, res.fun))
+    # Use the corrected model to find c & l.  x=[c,l]
+    min_func = lambda x: chi_sqr(times, xs, frames, 4*pixel_scale, phi, x[0], x[1], n0, h)
+    res = scipy.optimize.minimize(min_func,np.asarray([c, l]))
+    c, l = res.x
+    print('Phi: {}; C: {}; L: {}; Chi_sqr: {}'.format(phi, c, l, res.fun))
     # plot model lines for each time
 
     for iname, name in enumerate(img_names):
@@ -105,7 +115,7 @@ for itake, take in enumerate(takes):
         xs = np.linspace(0, 0.2, 1000)
         ts = np.asarray([time]*len(xs))
 
-        heights = n(xs, time, phi, n0, h)
+        heights = n(xs, time, phi, c, l, n0, h)
         plt.plot(xs, ts, heights)
 
 
