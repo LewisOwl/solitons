@@ -74,21 +74,31 @@ for itake, take in enumerate(takes):
         fi, time = re.findall(r'\d+', name)
 
         time = int(time)/1000
-        # Find the wave amplitude
-        img = cv2.imread(img_path+name)[::-2,5:-5,2] # Remove aliasing and select red channel
+        img = cv2.imread(img_path+name)[::-2,5:-5,:] # Remove aliasing
+        # BGR Thresholding
+
+        img = img[:,:,2]  # Select red channel
         img = img < THRESH # Threshold the image to show wave
         img_sum = np.sum(img, axis=0)
 
+        # # HSV Thresholding
+        # hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        # H = 100
+        # hsv_thresh = 10
+        # img = cv2.inRange(hsv_img, np.array([H - hsv_thresh, 150, 150]), np.array([[H + hsv_thresh,255,255]]))
+        # cv2.imshow('bin', img)
+        # cv2.waitKey()
+        # img = img > 0
 
-
+        # Find the wave amplitude
         dif = img ^ stat
         dif_sum = np.sum(dif, axis=0)
         frames[:,iname] = dif_sum*pixel_scale
         # 3d plot of each frame
         ts = np.asarray([time]*len(dif_sum))
         times.append(time)
-        #plt.plot(xs, ts, frames[:,iname])
-        plt.scatter(xs, ts, frames[:,iname], marker='x')
+        plt.plot(xs, ts, frames[:,iname])
+        #plt.scatter(xs, ts, dif_sum*pixel_scale, marker='o')
 
 
     # Frames is now 2d array of amplitudes for (x,t). We need to find phi offset
