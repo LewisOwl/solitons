@@ -21,6 +21,7 @@ def n(x, t, phi, c, l, *args):
 
     # calc sech params
     arg = (x - c*t)/l + phi # phi the param offset to translate the wave
+    # print(arg)
     trig = np.cosh(arg)**2
     return n0 / trig
 
@@ -78,33 +79,38 @@ for itake, take in enumerate(takes):
         img = img < THRESH # Threshold the image to show wave
         img_sum = np.sum(img, axis=0)
 
+
+
         dif = img ^ stat
         dif_sum = np.sum(dif, axis=0)
-        frames[:,iname] = dif_sum
+        frames[:,iname] = dif_sum*pixel_scale
         # 3d plot of each frame
         ts = np.asarray([time]*len(dif_sum))
         times.append(time)
-        heights = dif_sum*pixel_scale
-        plt.plot(xs, ts, heights)
+
+        plt.plot(xs, ts, frames[:,iname])
 
 
     # Frames is now 2d array of amplitudes for (x,t). We need to find phi offset
     # that fits the curve to the wave. We can chi_sqr min this.
-    n0 = np.max(frames)*pixel_scale
+    n0 = np.max(frames)
     h = float(level)/100
     # Calc theoretical values as inital vals
     c0 = -(g*h)**0.5    # Our wave moves to left => negative c
     c = c0*(1 + n0 / (2*h))
     l = ((4*(h**3)) / (3*n0))**0.5
+
+    c, l = c, l*0.68
+    print(c,l)
     # Start by finding a phi that corrects the wave translation
-    phi_min_func = lambda phi: chi_sqr(times, xs, frames, 4*pixel_scale, phi, c, l, n0, h)
-    res = scipy.optimize.minimize(phi_min_func, -10)
+    phi_min_func = lambda phi: chi_sqr(times, xs, frames, 1*pixel_scale, phi, c, l, n0, h)
+    res = scipy.optimize.minimize(phi_min_func, -18, method='Nelder-Mead')
     phi = res.x[0]
     # Use the corrected model to find c & l.  x=[c,l]
-    min_func = lambda x: chi_sqr(times, xs, frames, 4*pixel_scale, phi, x[0], x[1], n0, h)
-    res = scipy.optimize.minimize(min_func,np.asarray([c, l]))
+    min_func = lambda x: chi_sqr(times, xs, frames, 3*pixel_scale, phi, x[0], x[1], n0, h)
+    res = scipy.optimize.minimize(min_func,[c, l], method='Nelder-Mead')
     c, l = res.x
-    print('Phi: {}; C: {}; L: {}; Chi_sqr: {}'.format(phi, c, l, res.fun))
+    print('Phi: {:.2f}; C: {:.3f}ms^-1; L: {:.3f}m; Chi_sqr_red: {:.5f}'.format(phi, c, l, res.fun))
     # plot model lines for each time
 
     for iname, name in enumerate(img_names):
