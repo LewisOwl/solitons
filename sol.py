@@ -55,8 +55,8 @@ lag_skip = 5
 
 
 for ilevel, level in enumerate(levels):
-    # if ilevel != t_ilevel:
-    #     continue
+    if ilevel != t_ilevel:
+        continue
 
     print('##################  Level: {}cm  ##################'.format(level))
 
@@ -174,7 +174,7 @@ for ilevel, level in enumerate(levels):
             thetas = (xs - c*ts)/l + phi
             residuals = (frames[:,iname]/n0 - n(xs, time, phi, c, l, n0, h)/n0)/(y_err/n0)
             #plt.plot(xs, ts, frames[:,iname]/n0)
-            curve.errorbar(thetas[::marker_skip], frames[::marker_skip,iname]/n0 + ilevel/2, fmt='x', markersize=3, yerr=y_err/n0, capsize=4, color=colors[ilevel], zorder=1)
+            curve.errorbar(thetas[::marker_skip], frames[::marker_skip,iname]/n0 + ilevel/2, fmt='x', markersize=3, yerr=y_err/n0, capsize=1.5, color=colors[ilevel], zorder=1)
             resid.scatter(thetas[::marker_skip], residuals[::marker_skip], s=3, marker='x', color=colors[ilevel], zorder=1)
             # Store residuals for lag plot later
             # lag.scatter(residuals[:-1], residuals[1:], marker='x', color=colors[ilevel], s=10, edgecolors=None)
@@ -183,17 +183,29 @@ for ilevel, level in enumerate(levels):
 
     all_residuals = all_residuals[np.argsort(all_thetas)]
     lag.scatter(all_residuals[:-1:lag_skip], all_residuals[1::lag_skip], marker='x', color=colors[ilevel], s=3, edgecolors='k', alpha=0.5)
-# Plot dashed model and residual lines
+
+# Plot dashed model and residual lines and lag plot bounds
 thetas = np.linspace(-4, 4, 1000)
+
 resid.plot(thetas, [1]*len(thetas), c='k', ls='--', zorder=2)
 resid.plot(thetas, [-1]*len(thetas), c='k', ls='--', zorder=2)
+
+lag.plot([-2]*len(thetas), np.linspace(-2, 2, len(thetas)), c='k', ls='--', zorder=2)
+lag.plot([2]*len(thetas), np.linspace(-2, 2, len(thetas)), c='k', ls='--', zorder=2)
+lag.plot(np.linspace(-2, 2, len(thetas)), [-2]*len(thetas), c='k', ls='--', zorder=2)
+lag.plot(np.linspace(-2, 2, len(thetas)), [2]*len(thetas), c='k', ls='--', zorder=2)
 
 for ilevel, _ in enumerate(levels):
     curve.plot(thetas, 1/np.cosh(thetas)**2 + ilevel/2, c='k', ls='--', zorder=2)
 
-curve.set(ylabel='η/η0')
-resid.set(ylabel='δ', xlabel='(x - ct)/L')
-lag.set(xlabel='δn', ylabel='δn-1')
+curve.set(ylabel=r'$\frac{\eta}{\eta_0}$', xlabel=r'$\frac{x - ct}{L}$')
+curve.tick_params(axis='x', direction='out', top = True, bottom = False,
+labeltop = True, labelbottom = False)
+
+resid.set(ylabel='δ')
+resid.set_ylim([-5, 5])
+
+lag.set(xlabel=r'$δn$', ylabel=r'$δ_(n-1)$')
 lag.set_xlim([-5, 5])
 lag.set_ylim([-5, 5])
 
