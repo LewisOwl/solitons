@@ -1,9 +1,11 @@
 # ignore the data files, plots and pickled/ saved data
 
-datas/
+rawdata/
+procdata/
 datas.zip
 
 plots/
 
 *.p
-*.np
+*.npy
+*.txt

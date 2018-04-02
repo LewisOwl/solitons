@@ -3,9 +3,7 @@ import numpy as np, scipy.optimize
 import cv2
 
 from models import *
-
-# Path to images
-path = "datas/vh/h{0}cm_{1}/"
+from paths import *
 
 # Errors
 pixel_err = 2
@@ -39,7 +37,7 @@ def baseline(level):
     '''Find baseline water level for a particular water level, for use in
     finding final wave calc_amplitudes
     Returns: Binary mask of static water level'''
-    stat_path = path.format(level, 'static2')
+    stat_path = datapath.format(level, 'static2')
     stat_names = []
     for (_,_, filename) in os.walk(stat_path):
         stat_names += filename
@@ -56,7 +54,7 @@ def calc_amplitudes(level, take, static):
         Times for columns of amplitude matrix
         Xs for rows of amplitude matrix'''
     # Find all frames for the level and take
-    img_path = path.format(level, 't{0}'.format(take))
+    img_path = datapath.format(level, 't{0}'.format(take))
     img_names = []
     for (_,_, filename) in os.walk(img_path):
         img_names += filename
@@ -204,16 +202,46 @@ def process(level, take):
     derbin = derbin_watson(resids)
 
     return (times, xs, thetas), (amps, resids), (c, c_err, l, l_err, phi,
-            chi_sqr_red, derbin), (c_t, c_t_err, l_t, l_t_err)
+            chi_sqr_red, derbin, n0, y_err, h), (c_t, c_t_err, l_t, l_t_err)
 
+def save_spec(level, take, verbose=False):
+    if verbose:
+        print('{:#^50}'.format('  Level: {:} --- Take: {:}  '.format(level, take)))
+    (times, xs, thetas), (amps, resids), exp_params, theory_params = process(level, take)
+    c, c_err, l, l_err, phi, chi_sqr_red, derbin, n0, y_err, h = exp_params
+    c_t, c_t_err, l_t, l_t_err = theory_params
+    if verbose:
+        print('C_t: {:.3f}±{:.3f}cm; L_t: {:.3f}±{:.3f}cm; '.format(c_t*100, c_t_err*100, l_t*100, l_t_err*100))
+        print('C: {:.3f}±{:.3f}cms^-1; L: {:.3f}±{:.3f}cm; χ^2: {:.2f}; D: {:.2f}'.format(c*100, c_err*100, l*100, l_err*100, chi_sqr_red*amps.size, derbin))
+
+
+    # Save independents
+    np.save(savepath.format('times', level, take), times)
+    np.save(savepath.format('xs', level, take), xs)
+    np.save(savepath.format('thetas', level, take), thetas)
+    # Save matrices
+    np.save(savepath.format('amps', level, take), amps)
+    np.save(savepath.format('resids', level, take), resids)
+    # Save model params
+    np.savetxt(savepath.format('exp_params', level, take)+'.txt', exp_params)
+    np.savetxt(savepath.format('theory_params', level, take)+'.txt', theory_params)
+
+def save_all(verbose=False):
+    for level in levels:
+        for take in takes:
+            save_spec(level, take, verbose=verbose)
 
 if __name__ == '__main__':
-    # Target specific wave for testing
-    t_level = '6.90'
-    t_take = 4
 
-    (times, xs, thetas), (amps, resids), (c, c_err, l, l_err, phi, chi_sqr_red, derbin), (c_t, c_t_err, l_t, l_t_err) = process(t_level, t_take)
+    save_all()
 
-
-    print('C_t: {:.3f}±{:.3f}cm; L_t: {:.3f}±{:.3f}cm; '.format(c_t*100, c_t_err*100, l_t*100, l_t_err*100))
-    print('C: {:.3f}±{:.3f}cms^-1; L: {:.3f}±{:.3f}cm; χ^2: {:.2f}; D: {:.2f}'.format(c*100, c_err*100, l*100, l_err*100, chi_sqr_red*amps.size, derbin))
+    # # Target specific wave for testing
+    # t_level = '6.90'
+    # t_take = 4
+    #
+    # (times, xs, thetas), (amps, resids), (c, c_err, l, l_err, phi, chi_sqr_red, derbin), (c_t, c_t_err, l_t, l_t_err) = process(t_level, t_take)
+    #
+    # save_spec('6.90', 4)
+    #
+    # print('C_t: {:.3f}±{:.3f}cm; L_t: {:.3f}±{:.3f}cm; '.format(c_t*100, c_t_err*100, l_t*100, l_t_err*100))
+    # print('C: {:.3f}±{:.3f}cms^-1; L: {:.3f}±{:.3f}cm; χ^2: {:.2f}; D: {:.2f}'.format(c*100, c_err*100, l*100, l_err*100, chi_sqr_red*amps.size, derbin))
