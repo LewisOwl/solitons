@@ -1,4 +1,9 @@
-# ignore the data files
+# ignore the data files, plots and pickled/ saved data
 
 datas/
 datas.zip
+
+plots/
+
+*.p
+*.np
