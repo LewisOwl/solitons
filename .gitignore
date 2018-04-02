@@ -4,8 +4,10 @@ rawdata/
 procdata/
 datas.zip
 
+__pycache__/
 plots/
 
 *.p
 *.npy
 *.txt
+*.pyc
