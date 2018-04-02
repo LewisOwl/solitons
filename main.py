@@ -21,6 +21,8 @@ if __name__ == '__main__':
                         action='store_true', help='Save a graph of data')
     parser.add_argument('-v', '--verbose', dest='verbose', default=False,
                         action='store_true', help='Print out stats')
+    parser.add_argument('-cl', '--clplot', dest='clplot', default=False,
+                        action='store_true', help='CL plot')
     args = parser.parse_args()
 
     if args.proc_all:
@@ -30,6 +32,8 @@ if __name__ == '__main__':
         proc.save_spec(level, take, verbose=args.verbose)
 
     all_resids = np.empty(0)
+    clplotvals = np.empty(4)
+    clploterrs = np.empty(4)
     for i_level, level in enumerate(levels):
         for i_take, take in enumerate(takes):
             # Load all important values
@@ -49,6 +53,10 @@ if __name__ == '__main__':
             (c, c_err, l, l_err, phi, chi_sqr_red,
              derbin, n0, y_err, h) = exp_params
             c_t, c_t_err, l_t, l_t_err = theory_params
+
+            clplotvals = np.c_[clplotvals, np.array([c, l, c_t, l_t])]
+            clploterrs = np.c_[clploterrs, np.array([c_err, l_err, c_t_err,
+                                                     l_t_err])]
 
             if args.verbose and not args.proc_all:
                 border = '{:#^50}'
@@ -73,15 +81,20 @@ if __name__ == '__main__':
                     plot.plot_curve(psis, amps[:, it]/n0, n0, y_err/n0,
                                     i_level/2, i_take)
 
-    if args.graphsave or args.graphshow:
-        max_occ = plot.plot_occ(all_resids, 0.5)
+            if args.clplot:
+                plot.plot_cl([c, l, c_t, l_t], [c_err, l_err,
+                                                c_t_err, l_t_err], i_take)
 
+    if args.graphsave or args.graphshow:
+        max_occ = plot.plot_occ(all_resids, 0.25)
         plot.style_curve()
         plot.style_residuals()
         plot.style_lag()
         plot.style_occ(max_occ)
-    if args.graphsave:
-        plot.save_plots('plots/main_plot.png')
 
+    if args.graphsave:
+        plot.save_main('plots/main.png')
+    if args.clplot:
+        plot.save_cl('plots/c_vs_l.png')
     if args.graphshow:
-        plot.show_plot()
+        plot.show_main()

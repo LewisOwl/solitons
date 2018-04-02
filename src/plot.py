@@ -24,8 +24,8 @@ resid = main.add_axes([0.1, 0.1, 0.55, 0.20], sharex=curve)
 occ = main.add_axes([0.65, 0.1, 0.25, 0.20], sharey=resid)
 lag = main.add_axes([0.65, 0.3, 0.25, 0.20])
 
-# cv = plt.figure(figsize=(8,8))
-# cvax = cv.add_axes([0.1,0.1,0.85,0.85])
+cl = plt.figure(figsize=(8,8))
+clax = cl.add_axes([0.1,0.1,0.85,0.85])
 
 
 def style_curve():
@@ -72,10 +72,9 @@ def style_lag():
 
 
 def style_occ(max_count):
-    occ.set_xlim([0.25, 0])
+    occ.set_xlim([max_count*1.2, 0])
     occ.tick_params(axis='y', direction='inout', left=False, right=False,
                     labelleft=False)
-    occ.set_xticks([0, 0.1, 0.2, 0.3])
     occ.set_xlabel(r'$f$')
     occ.plot(np.linspace(0, 1, 100), [1]*100, ls='--', c='k')
     occ.set_xlabel(r'$f$')
@@ -120,10 +119,24 @@ def plot_occ(all_residuals, bin_width):
                  color=bincols[int(abs(len(bins)/2-i_bin))])
     return max_count
 
+def plot_cl(vals, errs, i_color):
+    c, l, c_t, l_t = vals
+    c_err, l_err, c_t_err, l_t_err = errs
+    color = colors[i_color]
+    clax.errorbar(c, l, xerr=c_err, yerr=l_err, fmt='x', markersize=3,
+     capsize=1.5, color=color, zorder=1)
+    clax.errorbar(c_t, l_t, xerr=c_t_err, yerr=l_t_err,  fmt='x', markersize=3,
+     capsize=1.5, color=color, zorder=1)
 
-def save_plots(name):
+def save_main(name):
     main.savefig(name)
 
 
-def show_plot():
-    plt.show()
+def show_main():
+    main.show()
+
+def save_cl(name):
+    cl.savefig(name)
+
+def show_cl():
+    cl.show()
