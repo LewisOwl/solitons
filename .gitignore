@@ -1,13 +1,14 @@
 # ignore the data files, plots and pickled/ saved data
 
-rawdata/
-procdata/
 datas.zip
 
 __pycache__/
-plots/
+
 
 *.p
 *.npy
 *.txt
 *.pyc
+
+*.png
+*.avi
