@@ -186,7 +186,7 @@ def derbin_watson(residuals):
 def process(level, take):
     h = float(level)/100
     y_err = pixel_err * pixel_scales_y[level]
-    baselevel = baseline(t_level)
+    baselevel = baseline(level)
     amps, times, xs = calc_amplitudes(level, take, baselevel)
 
     # Calc n0
