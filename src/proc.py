@@ -22,7 +22,7 @@ pixel_scales_y = {'5.85': 0.08/280, '6.90': 0.08/278,
 pixel_scale_x = 0.1/331
 
 # Iterations in finding param errors
-ITERS = 20
+ITERS = 1000
 
 
 def chi_sqr(times, xs, exp_data, exp_err, phi, c, l, *args):
@@ -121,7 +121,7 @@ def model_fit(h, y_err, n0, amplitudes, times, xs):
     chi_sqr_red = res.fun
 
     # Calc errors on params
-    target_chi = chi_sqr_red + 100/amplitudes.size
+    target_chi = chi_sqr_red + 100/amplitudes.size  # Larger errors on params
     c_dash, l_dash = c, l
 
     # Functions to target chi = target_chi
@@ -140,24 +140,39 @@ def model_fit(h, y_err, n0, amplitudes, times, xs):
 
     # Find error in c
     c_dash, l_dash = c, l
+    c_err = 0
     for it in range(ITERS):
-        # Target +2.3 varing c
+        # find target chi varing c
         c_dash = minimize(t_func_c, c_dash, method='Nelder-Mead').x[0]
+        # Calc current c error
+        c_c_err = abs(c - c_dash)
+        if c_c_err > c_err:
+            c_err = c_c_err
         # minimize varying l
         l_dash = minimize(m_func_l, l_dash, method='Nelder-Mead').x[0]
-    # End on a chi +2.3
+    # End on a target chi
     c_dash = minimize(t_func_c, c_dash, method='Nelder-Mead').x[0]
-    c_err = abs(c - c_dash)
+    c_c_err = abs(c - c_dash)
+    if c_c_err > c_err:
+        c_err = c_c_err
+
     # Find error in l
     c_dash, l_dash = c, l
+    l_err = 0
     for it in range(ITERS):
-        # Target +2.3 varing l
+        # find target chi varing l
         l_dash = minimize(t_func_l, l_dash, method='Nelder-Mead').x[0]
+        # calc current l error
+        c_l_err = abs(l_dash - l)
+        if c_l_err > l_err:
+            l_err = c_l_err
         # minimize varying c
         c_dash = minimize(m_func_c, c_dash, method='Nelder-Mead').x[0]
-    # End on a chi +2.3
+    # End on a target chi
     l_dash = minimize(t_func_l, l_dash, method='Nelder-Mead').x[0]
-    l_err = abs(l_dash - l)
+    c_l_err = abs(l_dash - l)
+    if c_l_err > l_err:
+        l_err = c_l_err
 
     return c, c_err, l, l_err, phi, chi_sqr_red
 
@@ -197,7 +212,7 @@ def process(level, take):
     # Calc n0
     ordered_vals = amps.flatten()
     ordered_vals.sort()
-    n0 = np.mean(ordered_vals[-50:])
+    n0 = np.mean(ordered_vals[::-1][30:70])
     # Find model params
     c, c_err, l, l_err, phi, chi_sqr_red = model_fit(h, y_err, n0, amps,
                                                      times, xs)
@@ -233,7 +248,7 @@ def save_spec(level, take, verbose=False):
         exp_str = exp_str.format(c*100, c_err*100, l*100, l_err*100)
         print(exp_str)
         fit_str = 'χ^2: {:.2f}; D: {:.2f}'
-        fit_str = fit_str.format(chi_sqr_red*amps.size, derbin)
+        fit_str = fit_str.format(chi_sqr_red, derbin)
         print(fit_str)
 
     # Save independents

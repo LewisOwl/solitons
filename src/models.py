@@ -23,7 +23,7 @@ def theory_c(n0, n0_err, h, h_err):
     term1 = 0.25*(frac_g**2 + frac_h**2)
     term2 = (frac_n0)**2 + frac_h**2
     c_t_err = c_t * (term1 + 1/(2*h/n0 + 1) * term2)**0.5
-    return c_t, c_t_err
+    return c_t, abs(c_t_err)
 
 
 def theory_l(n0, n0_err, h, h_err):
@@ -31,4 +31,4 @@ def theory_l(n0, n0_err, h, h_err):
     frac_h = h_err/h
     frac_n0 = n0_err/n0
     l_t_err = l_t/2 * ((3*frac_h)**2 + frac_n0**2)**0.5
-    return l_t, l_t_err
+    return l_t, abs(l_t_err)
