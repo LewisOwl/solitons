@@ -4,7 +4,7 @@ from argparse import ArgumentParser as argparser
 from src.paths import savepath, datapath
 from src.proc import levels, takes
 
-import src.plot as plot
+import src.plot_main as plot
 import src.proc as proc
 
 if __name__ == '__main__':
@@ -86,13 +86,13 @@ if __name__ == '__main__':
                 print(fit_str)
 
             if args.graphsave or args.graphshow:
-                plot.plot_resid(thetas, resids, i_take)
-                plot.plot_lag(resids, i_take)
+                plot.plot_resid(plot.resid, thetas, resids, i_take)
+                plot.plot_lag(plot.lag, resids, i_take)
                 for it, t in enumerate(ts):
                     psis = (xs-c*t)/l + phi
                     norm_amps = amps[:, it]/n0
                     errs = y_err/n0 * (1 + norm_amps**2)**0.5
-                    plot.plot_curve(psis, norm_amps, errs, i_level/2, i_take)
+                    plot.plot_curve(plot.curve, psis, norm_amps, errs, i_level/2, i_take)
 
         if args.graphsavesec:
             n0cs = n0cs[:,1:]
@@ -106,13 +106,16 @@ if __name__ == '__main__':
                    newline=' \\\ \hline \n', header=header)
 
     if args.graphsave or args.graphshow:
-        max_occ = plot.plot_occ(*plot.calc_occ(all_resids, 0.5))
-        plot.style_curve()
-        plot.style_residuals()
-        plot.style_lag()
-        plot.style_occ(max_occ)
+        resid_lims = (-5, 5)
+        xlims = [-4, 4]
+        max_occ = plot.plot_occ(plot.occ, *plot.calc_occ(all_resids, 0.5))
+        plot.style_curve(plot.curve, xlims, r'$(i)$')
+        plot.style_residuals(plot.resid, resid_lims, r'$(ii)$')
+        plot.style_lag(plot.lag, resid_lims, r'$(iv)$')
+        plot.style_occ(plot.occ, max_occ, resid_lims, r'$(iii)$')
 
     if args.graphsavesec:
+        plot.style_n0c()
         plot.save_sec('plots/sec.png')
     if args.graphsave:
         plot.save_main('plots/main.png')
