@@ -32,3 +32,7 @@ def theory_l(n0, n0_err, h, h_err):
     frac_n0 = n0_err/n0
     l_t_err = l_t/2 * ((3*frac_h)**2 + frac_n0**2)**0.5
     return l_t, abs(l_t_err)
+
+
+def sech2(theta):
+    return 1/np.cosh(theta)**2
