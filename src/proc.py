@@ -9,7 +9,7 @@ from .paths import savepath, datapath
 
 # Errors
 pixel_err = 2
-h_err = 0.005/100
+h_err = 0.0005/100
 
 # Set up levels, threshold values and pixel scales
 takes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

@@ -8,7 +8,7 @@ s_labels = [(r'$(a.i)$', [0.8, 92]), (r'$(a.ii)$', [0.798, 95.3]),
             (r'$(a.iii)$', [1.01, 108.5]), (r'$(a.iv)$', [1.61, 116.5]),
             (r'$(a.v)$', [2.105, 115.2]), (r'$(a.vi)$', [2.21, 120])]
 
-s_style = [s_xlims, s_ylims, s_labels, (resid_xlims, (-20, 20))]
+s_style = [s_xlims, s_ylims, s_labels, (resid_xlims, (-5, 5))]
 
 l_xlims = [[0.79, 2.05], [0.79, 1.7], [1, 2.74], [1.6, 3.2],
                       [2.1, 2.85], [2.2, 3.3]]
@@ -18,4 +18,4 @@ l_labels = [(r'$(a.i)$', [0.8, 19.3]), (r'$(a.ii)$', [0.798, 21.4]),
             (r'$(a.iii)$', [1.01, 27]), (r'$(a.iv)$', [1.61, 26.2]),
             (r'$(a.v)$', [2.105, 26.5]), (r'$(a.vi)$', [2.21, 29.5])]
 
-l_style = [l_xlims, l_ylims, l_labels, (resid_xlims, (-20, 20))]
+l_style = [l_xlims, l_ylims, l_labels, (resid_xlims, (-5, 5))]

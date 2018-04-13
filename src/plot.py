@@ -5,9 +5,9 @@ from scipy.stats import norm
 
 # Choose plot colour scheme
 cmap = cm.winter
-colors = cmap(np.linspace(0.2, 1, 10))
+colors = cmap(np.linspace(0, 1, 6))
 
-fontsize = 13
+fontsize = 16
 labelpad = 3
 
 def gen_main_axes():
@@ -21,7 +21,7 @@ def gen_main_axes():
 
 def gen_sec_axes(xlab, ylab):
     fig = plt.figure(figsize=(10, 10))
-    back = fig.add_axes([0.05, 0.05, 0.85, 0.94])
+    back = fig.add_axes([0.0, 0.05, 0.85, 0.94])
     ax1 = fig.add_axes([0.05, 0.75, 0.4, 0.22])
     ax2 = fig.add_axes([0.5, 0.75, 0.4, 0.22])
     ax3 = fig.add_axes([0.05, 0.5, 0.4, 0.22])
@@ -39,8 +39,10 @@ def gen_sec_axes(xlab, ylab):
     back.spines['left'].set_color('none')
     back.spines['right'].set_color('none')
     back.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+    back.set_xticks([])
+    back.set_yticks([])
     back.xaxis.set_label_position('top')
-    back.set_ylabel(ylab, labelpad=10, fontsize=fontsize)
+    back.set_ylabel(ylab, labelpad=1, fontsize=fontsize)
     back.set_xlabel(xlab, labelpad=1, fontsize=fontsize)
     return fig, back, axs, resids, occ, lag
 
@@ -53,7 +55,7 @@ def style_main_axes(curve, resids, occ, lag, r_lims, max_occ):
     curve.set_xlim(r_xlims)
     curve.text(r_xlims[0]*0.98, 3.6, r'$(a)$')
     # Style residual plot
-    resids.set_xlabel(r'$\frac{x - c \cdot t}{L}$', fontsize=fontsize,
+    resids.set_xlabel(r'Phase $\theta$', fontsize=fontsize,
                      labelpad=labelpad)
     resids.set_ylabel(r'Norm. Residual $δ$', fontsize=fontsize, labelpad=labelpad)
     resids.set_ylim(r_ylims)
@@ -173,25 +175,25 @@ def plot_occ(ax, occ_bins, bin_values, widths, norm_y, norm_x, norm_scale, horiz
     return np.max(bin_values)
 
 
-def scatter_error(ax, xs, x_err, ys, y_errs, i, marker_step=1, markersize=6):
-    color = colors[i]
-    ax.errorbar(xs[::marker_step], np.absolute(ys[::marker_step]), xerr=x_err, yerr=y_errs[::marker_step], c=color, fmt='x', capsize=1.5, markersize=markersize, zorder=1)
+def scatter_error(ax, xs, x_err, ys, y_errs, i_color, marker_step=1, markersize=6, colors=colors):
+    color = colors[i_color]
+    ax.errorbar(xs[::marker_step], ys[::marker_step], xerr=x_err, yerr=y_errs[::marker_step], c=color, fmt='x', capsize=1.5, markersize=markersize, zorder=1)
 
-def plot_curve(ax, xs, ys, i):
-    ax.plot(xs, ys, color='k', ls='--', zorder=3)
+def plot_curve(ax, xs, ys, i, color='k'):
+    ax.plot(xs, ys, color=color, ls='--', zorder=3)
 
 
-def plot_resid(ax, xs, residuals, i_color, resid_step=1, s=20):
+def plot_resid(ax, xs, residuals, i_color, resid_step=1, s=20, colors=colors):
     color = colors[i_color]
     ax.scatter(xs[::resid_step], residuals[::resid_step], s=s,
                   marker='x', color=color, zorder=1)
 
-def plot_lag(ax, residuals, i_color, lag_step=1, s=20, alpha=1):
+def plot_lag(ax, residuals, i_color, lag_step=1, s=20, alpha=1, colors=colors):
     color = colors[i_color]
     ax.scatter(residuals[:-1:lag_step], residuals[1::lag_step], marker='x',
                 color=color, s=s, edgecolors='k', alpha=alpha)
 
 def save(fig, name):
     fig.patch.set_alpha(0)
-    fig.savefig(name, bbox_inches='tight', pad_inches=0, format='png')
+    fig.savefig(name, bbox_inches='tight', pad_inches=0, format='eps')
     fig.patch.set_alpha(1)

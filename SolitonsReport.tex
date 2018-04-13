@@ -9,10 +9,12 @@
 
 \usepackage[font=small,
 labelfont=bf]{caption}                      % Defines caption font size as 9pt and caption title bolded
-
+\captionsetup{justification=raggedright,singlelinecheck=false}
 
 \usepackage{graphics,graphicx,epsfig,ulem}	% Makes sure all graphics works
 \usepackage{amsmath} 						% Adds mathematical features for equations
+\DeclareMathOperator{\sech}{sech}
+\usepackage{tabularx}
 
 \usepackage{etoolbox}                       % Customise date to preferred format
 \makeatletter
@@ -50,86 +52,251 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
 
 \section{Introduction}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Nonlinear solutions to the Korteweg-de Vries (KdV) equation, known as solitons, are of great importance across a wide range of scientific and engineering disciplines forming a suitable mathematical description for nonlinear acoustics, plasma waves and pulses in optical fibers \cite{falcon}.
+
+In this work we will investigate the functional form of solitary wave packets propigating on the surface of shallow water emitted as solutions to the KdV equation, and compare the theoretical wave characteristics to experimental data.
+
+\section{Theory}
+It has long been established that solitary waves in water have a well defined shape, invarient under collisions and linked to the wave speed \cite{russell}.
+Previous work in the field of shallow water solitons has established that under the a few assumptions, the soliton shape has a definite analytical form \cite{bettini}.
+The key assumptions are stated as follows:
+
+1) Water can be described as a homogeneous, imcompressible fluid without viscosity.
+
+2) Water is held in a tank of constant width and depth, with constant pressure on the surface.
+
+3) Surface tension can be neglected.
+
+4) Small amplitudes and long waves.
 
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Defining the wave amplitude $\eta(x, t)$ as the vertical displacment of a particle on the water surface, as a function of postition on the surface $x$, and varying through time $t$, the proposed analytical description for a left travelling soliton takes the form \cite{bettini}:
+\begin{equation}
+  \eta(x, t) = \eta_0\sech^2(\frac{x + c \cdot t}{L})
+\label{eq:model}
+\end{equation}
+Where $c$ the wave propigation speed is a constant, $L$ the characteristic wave length and $\eta_0$ the peak wave amplitude.
+We call $c$ and $L$ the characteristics of our soliton and the derivation described by Bettini describes them as functions of the experimental parameters $h$, the water depth, and $\eta_0$.
+\begin{equation}
+  L = \sqrt{\frac{4h^3}{3\eta_0}}
+  \label{eq:L}
+\end{equation}
+With this definition of L we can quantify assumption 4 and place bounds on the experimental parameters our model is valid for.
+The small wave amplitude limit is defined as $\epsilon_1 \equiv \eta_0/h \ll 1$, while waves are considered long if $\epsilon_2 \equiv (h/L)^2 \ll 1$.
 
+The equation for wave speed is given as
+\begin{equation}
+\begin{align*}
+  c_0 &= \sqrt{gh} \\
+  c   &= c_0(1 + \frac{\eta_0}{2h})
+  \label{eq:c}
+\end{align*}
+\end{equation}
+For a constant $h$ this follows a linear relation with peak wave amplitude.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+If we were to experimentally determine these wave characteristics, we could transform into a normalised co-moving coordinate system where we can effectively compare waves generated from different experimental parameters.
+We define the phase angle $\theta$ as
+\begin{equation}
+  \theta = \frac{x + c \cdot t}{L} - \phi
+  \label{eq:coords}
+\end{equation}
+where $\phi$ is the constant used to center our coordinate system on the wave peak.
+For a wave generated with a peak at positon $x = x_0$ and initial time $t = t_0$
+\begin{equation}
+  \phi = \frac{x_0 + c \cdot t_0}{L}
+\end{equation}
+We can now represent our model equation in our co-moving coordinate system, as a normalised wave amplitude that describes any soliton we generate.
+\begin{equation}
+  \frac{\eta}{\eta_0} = \sech^2(\frac{x + c \cdot t}{L} - \phi) = \sech^2{\theta}
+  \label{eq:norm}
+\end{equation}
 
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 \section{Methods}
+We conducted our experiments on water waves in a shallow depth wave tank as described in Scott Russell's original work \cite{russell}, a long tank of constant width, with the water surface in constant interface with the atmosphere.
+The tank was placed on a flat surface, and confirmed to be perpendicular to gravity by way of a spirit level, to ensure a constant water depth $h$ throughout, satisfying assumption 2.
+Soliton waves were set up at one side of the tank with direction of propigation down the axis of the tank, denoted $x$.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+At the far end a camera was set up, at the same vertical height $h$ of the water, directed at a perpendicular to wave propigation, such that a wave was noted to move from right to left.
+Blue dye was added to the water to improve contract on the video against a white background.
+Each frame of the video was recorded and noted with a time $t$ from the first frame.
+Pixel data was extracted and a wave amplitude found by comparison with footage of the static water tank.
+Horizontal and vertical pixel data was converted to a physical distance $x$, and wave amplitude $\eta$ by a pixel scale factor determined from pixel measurements of a known fixed distance in the static water frames.
+These were then converted to a wave amplitude function $\eta(x, t)$ for analysis using the frame time $t$.
 
+There are two main modes of wave genesis: square wave inital condition by way of a sluice gate, and impulse by horizontal force \cite{russell}.
+In the sluice gate method we fill a confined area of the wave tank with a fixed volume of water up to a specific initial $\eta_0$.
+This generates a series of soliton waves of decreasing amplitude with the largest having the amplitude $\eta_0$.
+The dependency of speed on amplitude leads to dispersion with the largest wave travelling fastest and leading the motion.
+We would only be interested in this wave and the trailing dispersive waves would serve to disrupt our data or complicate our model.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+On the other hand, genesis by a horizontal impulse can effectivley generate single solitons, with sufficient practice.
+The tradeoff now however is that we cannot accurately choose $\eta_0$, and have to experimentally determine it for our analysis.
+None the less, this method was selected due to its ability to consistently solitary waves for study and hence simplifying our data collection.
 
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+For each water depth $h$, we recorded amplitude function $\eta(x, t)$ of several waves of differing initial amplitude $\eta_0$ and discarded any that were noted to exhibit dispersion or wave breaking - where wave amplitude exceeds a critical level and turbulant behaviour is observed, a phenomena not described by the KdV equation.
 
 \section{Results}
-For each wave measured we performed a $\chi^2$ minimisation on our model function to find $c$, $L$ and $\phi$. These are summarized below in Table 1. Using these model parameters, we performed a change of basis:
-\begin{equation}
-  \theta = \frac{x - ct}{L}
-\end{equation}
-and plotted $\theta$ with normalised amplitude $\frac{\eta}{\eta_{0}}$ in Figure 1.i .
+Taking our amplitude functions for each wave, $\eta(x, t)$, we performed a $\chi^2$ minimisation on our model function,  Equation \ref{eq:model}, and found free parameters $c$, $L$ and $\phi$ corresponding to wave speed, characteristic length, and phase offset respectively.
+In Fig \ref{plot:c}$(a)$ we have plotted the wave speed against maximum wave amplitude $\eta_0$ for each wave at a constant water level $h$, with subplot labels described by $n$ from Table \ref{table:data}.
+Also shown are theoretical models of wave speed from equation \ref{eq:c} as a dashed line for constant $h$.
+We see here that for some values of $h$, namely subplots $(i), (ii), (iii), (iv)$, the data appears to follow a linear trend that is not accurately described by the theory, while the others show no trend at all.
+This is supported by the structure in the overlaid residuals, $(b)$ for different values of $h$, represented as different colours.
+Moreover, when we analyse the lag plot $(d)$ the residualsn seam show a possitive correlation and 18.3\% fall outside the $\delta=\pm 2$ dashed box.
+This is quantised in Table \ref{table:data} where the Derbin-Watson statistic, $D_c$ varies significantly from 2 for all water levels, with an mean value of 0.67, suggesting the linear gradient expected from theory is less than we see experimentally.
+This is supported by the $\chi^2_\nu$ shown in the table as $\chi^2_c$ are of $\mathcal{O}(1)$ with a mean value of 3.07, indicating that while the theory does not match our data precisely, it can be used to approximate it.
+In the occurence plot we see the data is centered on a mean of 0.50 with only 48.3\% of data lying within $\delta=\pm 1$, less than expected from the normal distribution overlaid in grey, if the errors were random.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{figure}[!h]
+  \includegraphics[width=\columnwidth]{plots/speed}
+  \caption{
+  $(a)$: Wave speed $c$ against $\eta_0$ calculated from $\chi^2$ minimisation. Axes labels are defined in Table \ref{table:data}.
+  $(b)$: Overlaid normalised residuals from all subplots.
+  $(c)$: Relative occurence of all residuals.
+  $(d)$: Overlaid lag plots of all residuals.
+  }
+  \label{plot:c}
+\end{figure}
+
+\iffalse
+\begin{table}[!h]
+\centering
+\begin{tabularx}{\columnwidth}{ X  X  X  X  X  X  X  X  X }
+  \hline
+  $h$ / cm & $\sigma$ & $n$ & $\chi^2_M$ & $D_M$ & $\chi^2_c $ & $D_c$ & $\chi^2_L$ & $D_L$ \\
+  \hline\hline
+  $5.85$  & $0.0$ & $ i $   & $0.90$ & $1.31$ & $414$  & $0.85$ & $182$ & $2.37$ \\
+  $6.90$  & $0.5$ & $ ii $  & $0.53$ & $1.10$ & $269$  & $0.78$ & $70$  & $1.62$ \\
+  $8.00$  & $1.0$ & $ iii $ & $1.04$ & $0.68$ & $27$   & $0.53$ & $234$ & $1.19$ \\
+  $9.10$  & $1.5$ & $ iv $  & $2.78$ & $0.56$ & $5896$ & $1.06$ & $471$ & $0.95$ \\
+  $10.05$ & $2.0$ & $ v $   & $2.17$ & $0.80$ & $59$   & $2.65$ & $167$ & $1.70$ \\
+  $11.15$ & $2.5$ & $ vi $  & $4.21$ & $0.78$ & $202$  & $1.44$ & $41$  & $0.93$ \\
+  \hline
+\end{tabularx}
+\caption{
+Table linking water level $h$ to $\sigma$ in Fig \ref{table:data} and axes labels $(n)$ in Fig \ref{plot:c} \& Fig \ref{plot:L}. Stated also are:
+$\chi^2_M$, $D_M$: Average $\chi^2_\nu$ and Derbin statistic of model in Fig \ref{plot:model}.
+$\chi^2_c$, $D_c$: The $\chi^2_\nu$ and Derbin statistic of theoretical wave speed in Fig \ref{plot:c}.
+$\chi^2_L$, $D_L$: The $\chi^2_\nu$ and Derbin statistic of theoretical characteristic length in Fig \ref{plot::}.
+}
+\label{table:data}
+\end{table}
+\fi
+
+\begin{table}[!h]
+\centering
+\begin{tabularx}{\columnwidth}{ X  X  X  X  X  X  X  X  X }
+  \hline
+  $h$ / cm & $\sigma$ & $n$ & $\chi^2_M$ & $D_M$ & $\chi^2_c $ & $D_c$ & $\chi^2_L$ & $D_L$ \\
+  \hline\hline
+  $5.85$  & $0.0$ & $ i $   & $0.90$ & $1.31$ & $2.04$ & $0.15$ & $0.62$ & $1.61$ \\
+  $6.90$  & $0.5$ & $ ii $  & $0.53$ & $1.10$ & $1.49$ & $0.32$ & $3.27$ & $1.16$ \\
+  $8.00$  & $1.0$ & $ iii $ & $1.04$ & $0.68$ & $1.03$ & $0.31$ & $3.68$ & $1.16$ \\
+  $9.10$  & $1.5$ & $ iv $  & $2.78$ & $0.56$ & $8.25$ & $0.50$ & $10.0$ & $0.29$ \\
+  $10.05$ & $2.0$ & $ v $   & $2.17$ & $0.80$ & $1.09$ & $2.23$ & $6.42$ & $1.22$ \\
+  $11.15$ & $2.5$ & $ vi $  & $4.21$ & $0.78$ & $4.49$ & $0.61$ & $3.24$ & $0.94$ \\
+  \hline
+\end{tabularx}
+\caption{
+Table linking water level $h$ to $\sigma$ in Fig \ref{plot:model} and axes labels $(n)$ in Fig \ref{plot:c} \& Fig \ref{plot:L}. Stated also are:
+$\chi^2_M$, $D_M$: Average $\chi^2_\nu$ and Derbin statistic of model in Fig \ref{plot:model}.
+$\chi^2_c$, $D_c$: The $\chi^2_\nu$ and Derbin statistic of theoretical wave speed in Fig \ref{plot:c}.
+$\chi^2_L$, $D_L$: The $\chi^2_\nu$ and Derbin statistic of theoretical characteristic length in Fig \ref{plot:L}.
+}
+\label{table:data}
+\end{table}
+
+Fig \ref{plot:L}$(a)$ shows the relation for $L$ and $\eta_0$ with subplot labels again described in Table \ref{table:data}.
+The model functions represented by dashed lines are described by Equation \ref{eq:L} for each constant $h$.
+A clear trend is visible for subplots $(i), (ii), (iii), (iv)$ but the others show little correlation.
+This is supported in the overlaid residual plot $(b)$, where residuals at the same water level, depicted again by colour, appear to be skewed above the model exhibiting a linear structure.
+The occurence plot $(c)$ confirms the skew with the peak is shifted with a mean of 1.02 and only 36.7\% of data falling within a $\delta = \pm 1$ range.
+Analysis of the lag plot $(d)$ again shows a linear correlation with only 65.0\% of residuals falling within $\delta = \pm 2$ of the dashed box, significantly lower than would be expected of random error.
+The correlation is confirmed by Derbin-Watson statistics in the table, $D_L$, differing greatly from 2 for all water levels, with a mean of 1.06.
+The $\chi^2_\nu$, represented as $\chi^2_c$ in the table, are of $\mathcal{0}(1)$ with a mean of 4.5 suggesting that the model could be tweaked to accurately describe our data.
+
+\begin{figure}[!h]
+  \includegraphics[width=\columnwidth]{plots/length}
+  \caption{Wave amplitude
+  $(a)$: Characteristic length $L$ against $\eta_0$ calculated from $\chi^2$ minimisation. Axes labels are defined in Table \ref{table:data}.
+  $(b)$: Overlaid normalised residuals from all subplots.
+  $(c)$: Relative occurence of all residuals.
+  $(d)$: Overlaid lag plots of all residuals.
+  }
+  \label{plot:L}
+\end{figure}
+
+Using our values of the parameters $c, L, \phi$ described above, we can transform into our co-moving coordinate system described in equation \ref{eq:coords} and compare the models for different $\eta_0$ and $h$.
+In Fig \ref{plot:model}$(a)$ we show the normalised amplitudes against our new parameter $\theta$, with waves generated at the same water level overlaid in different colours.
+While our data shows a good fit to the model ??, it does appear to worsen for large $\theta$ where the model consistently underestimates the data, evident as our data points diverge from the model line.
+In Table \ref{table:data} we see an average $\chi^2_\nu$ of the models for each water level, denoted $\chi^2_M$, and they are all of $\mathcal{O}(1)$ suggesting that our model is a suitable fit.
+These $\chi^2_M$ however appear to increase with $h$ leading us to believe that the model breaks down for large $h$, most likely linked to the same effect we see at large $\theta$.
+This is more obvious in residual plot $(b)$ where we see a clear structure.
+We can confirm this in the lag plot $(d)$ where the structure is more clearly visible as a possitive correlation, with 10.4\% falling outside the $\delta = \pm 2$ range.
+The table quantises this in the Derbin-Watson statistics, $D_M$ which all differ significantly 2, with a mean of 0.87, suggesting our model is missing a component to describe this behaviour at large $\theta$.
+We see $D_M$ decreasing for larger $h$ leading us to believe the missing component is proportional to water level.
+Despite the structure in the residuals, we see from the occurence plot $(c)$ that 70.6\% of them fall within a $\delta = \pm 1$ range of the mean at 0.14 and they roughly follow the normal distribution expected from random error, overlaid in grey.
 
 \begin{figure}[!h]
   \includegraphics[width=\columnwidth]{plots/main}
-  \caption{Wave amplitude
-  $(i)$: Normalised amplitude with offset $i$ against $\theta$, where $i$ is dependent on water level $h$ as detailed in Table 1.
-  $(ii)$: Residuals $\delta$ with $\theta$ for each model function.
-  $(iii)$: Relative occurence $f$ of residuals for all datapoints, plotted with a dashed grey normal distribution
-  $(iv)$: Lag plot for each model overlaid.}
-  \label{plot}
+  \caption{
+  $(a)$: Normalised amplitude with offset $\sigma$ as described in Table \ref{table:data}. 1/200 points are plotted to increase visibility.
+  $(b)$: Normalised residuals $\delta$ for each model function. 1/75 points are plotted.
+  $(c)$: Relative occurence of residuals, overlaid with a dashed grey normal distribution.
+  $(d)$: Overlaid lag plot of residuals of each wave. 1/25 points are plotted, each with $\alpha$ = 0.3.
+  }
+  \label{plot:model}
 \end{figure}
 
-\begin{table}[h]
-  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-    \hline
-    $i$ & $h$ & $\eta_{0}$ & $c$ & $L$ & $c_{T}$ & $L_{T}$  & $\chi^{2}$ & $D$ \\
-    0.0 & 5.85 & 0.94 & -84.96 $\pm$ 0.25 & 11.403 $\pm$ 0.058 & -81.9 $\pm$ -1.4 & 16.8 $\pm$ 0.5 & 0.86 & 1.12 \\ \hline
-0.0 & 5.85 & 0.87 & -84.36 $\pm$ 0.27 & 11.202 $\pm$ 0.007 & -81.4 $\pm$ -1.4 & 17.6 $\pm$ 0.6 & 0.60 & 1.29 \\ \hline
-0.0 & 5.85 & 1.01 & -85.18 $\pm$ 0.23 & 11.668 $\pm$ 0.006 & -82.3 $\pm$ -1.3 & 16.3 $\pm$ 0.5 & 0.56 & 1.53 \\ \hline
-0.0 & 5.85 & 2.03 & -91.83 $\pm$ 0.06 & 8.055 $\pm$ 0.002 & -88.9 $\pm$ -1.0 & 11.5 $\pm$ 0.2 & 2.86 & 0.35 \\ \hline
-0.0 & 5.85 & 0.92 & -83.91 $\pm$ 0.05 & 11.692 $\pm$ 0.060 & -81.7 $\pm$ -1.4 & 17.0 $\pm$ 0.5 & 1.33 & 1.08 \\ \hline
-0.0 & 5.85 & 1.31 & -89.78 $\pm$ 0.35 & 10.540 $\pm$ 0.012 & -84.3 $\pm$ -1.2 & 14.3 $\pm$ 0.3 & 0.95 & 0.84 \\ \hline
-0.0 & 5.85 & 1.13 & -86.20 $\pm$ 0.04 & 10.925 $\pm$ 0.005 & -83.1 $\pm$ -1.2 & 15.3 $\pm$ 0.4 & 0.66 & 1.36 \\ \hline
-0.0 & 5.85 & 1.16 & -86.18 $\pm$ 0.35 & 10.933 $\pm$ 0.006 & -83.3 $\pm$ -1.2 & 15.2 $\pm$ 0.4 & 0.87 & 1.04 \\ \hline
-0.0 & 5.85 & 1.03 & -84.99 $\pm$ 0.05 & 10.811 $\pm$ 0.043 & -82.4 $\pm$ -1.3 & 16.1 $\pm$ 0.4 & 0.60 & 1.38 \\ \hline
-0.0 & 5.85 & 1.22 & -86.94 $\pm$ 0.04 & 10.678 $\pm$ 0.005 & -83.6 $\pm$ -1.2 & 14.8 $\pm$ 0.3 & 1.09 & 1.25 \\ \hline
-0.5 & 6.90 & 1.04 & -88.57 $\pm$ 0.06 & 13.801 $\pm$ 0.008 & -88.5 $\pm$ -1.3 & 20.5 $\pm$ 0.6 & 0.46 & 1.08 \\ \hline
-0.5 & 6.90 & 0.91 & -89.35 $\pm$ 0.05 & 13.954 $\pm$ 0.051 & -87.7 $\pm$ -1.4 & 22.0 $\pm$ 0.7 & 0.65 & 0.82 \\ \hline
-0.5 & 6.90 & 1.61 & -94.14 $\pm$ 0.05 & 10.776 $\pm$ 0.002 & -91.8 $\pm$ -1.1 & 16.5 $\pm$ 0.3 & 0.44 & 1.05 \\ \hline
-0.5 & 6.90 & 1.39 & -92.11 $\pm$ 0.04 & 13.339 $\pm$ 0.031 & -90.6 $\pm$ -1.1 & 17.8 $\pm$ 0.4 & 0.73 & 1.45 \\ \hline 
-
-  \end{tabular}
-\end{table}
 \section{Discussion}
+In our analysis of wave speed $c$ in Fig \ref{plot:c}$(a)$ we noted that the figures $(v), (vi)$ did not appear to show any trend.
+This was true also when analysing the characteristic length $L$ where the same figures showed little correlation with the theoretical model.
+This suggests that they outside of the limits placed on our experimental parameters by the assumptions made in the model derivation, namely assumption 4.
+Detailed in table \ref{table:limits} are the average $\epsilon_1, \epsilon_2$ determined from the mean characteristic length $\bar{L}$ and mean peak amplitude $\bar{\eta_0}$, for each water level.
+The model derivation required that $\epsilon_1, \epsilon_2 \ll 1$ and we see that for our data this simply does not hold.
+This would explain why our determined values of $c$ and $L$ did not match up with the theory.
+We do however see that the ratio $\epsilon_1 / \epsilon_2\sim\mathcal{O}(1)$, and as this played a key roll in the derivation of our model equation, by Bettini et al \cite{bettini}, could explain why the models in Fig \ref{plot:model} show a good fit with the data.
+
+\begin{table}[!h]
+\centering
+\begin{tabularx}{\columnwidth}{ X  X  X  X  X }
+  \hline
+  $h$ / cm & $n$     & $\epsilon_1$ & $\epsilon_2$ & $\epsilon_1 / \epsilon_2$\\
+  \hline\hline
+  $5.85$   & $ i $   & $0.19$       & $0.14$       & $1.4$                     \\
+  $6.90$   & $ ii $  & $0.18$       & $0.14$       & $1.3$                     \\
+  $8.00$   & $ iii $ & $0.21$       & $0.14$       & $1.5$                     \\
+  $9.10$   & $ iv $  & $0.27$       & $0.17$       & $1.6$                     \\
+  $10.05$  & $ v $   & $0.25$       & $0.17$       & $1.5$                     \\
+  $11.15$  & $ vi $  & $0.24$       & $0.17$       & $1.4$                      \\
+  \hline
+\end{tabularx}
+\caption{
+Table linking water depths $h$ and axes labels $(n)$ in Fig \ref{plot:c} \& Fig \ref{plot:L}, to assumption bound variables $\epsilon_1 , \epsilon_2$
+}
+\label{table:limits}
+\end{table}
+
+It was noted in our analysis of the model fit in Fig \ref{plot:model} that the residuals showed a well defined structure at large phase $\theta$.
+Transforming out of our co-moving coordinate system we note that this refers large $x, t$, or in physical terms, the trailing end of the wave.
+When we consider the dispersive nature of solitons and how they separate over large propigation distances it becomes clear that the discrepency we see in the model at large $\theta$ is due to additional solitons dispersing from the main wave.
+Our experiment could be improved upon by use of a longer wave tank such that measurements of amplitude can be taken at distance further away from the point of wave genesis, such that these trailing waves have had sufficient time to disperse from the primary soliton we measure.
+Alternatively, if we could find a way of consistently generating a single soliton to propigate through our wave tank we would see this class of discrepency in our model disappear entirely.
+
+The descretisation of residuals we see in Fig \ref{plot:model}$(b), (c)$ arrises as the pixal quantisation is conserved when in our convertion to wave amplitude $\eta(x, t)$.
+This is a property of the camera used in the experiment and the distance between it and the wave and it's effect can be reduced with a higher resolution camera.
+
+
+
+
 
 
 \section{Conclusions}
 
 
 \begin{thebibliography}{}
+\bibitem{falcon} E. Falcon, C. Laroche, S. Fauve, ``Observation of depression solitary surface waves on a thin fluid layer'', \textit{Physical Review Letters}, Nov. 11, 2002, Vol. 89, No. 20
+\bibitem{russell} J. S. Russell, ``Report on Waves'', \textit{Report of the Fourteenth Meeting of the British Association for the Advancement of Science}, (York, 1844), p. 320-321
+\bibitem{bettini} A. Bettini et al, ``Solitons in Undergraduate Labratory'', \textit{American Journel of Physics}, 1983, 51(11), 977-984
 
 
 \end{thebibliography}
